@@ -7,9 +7,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const navLinks = [
-    { name: "FAQs", to: "features" },
-    { name: "Guides", to: "plans" },
-    { name: "Support", to: "market" },
+    { name: "Features", to: "features" },
+    { name: "Plans", to: "plans" },
+    { name: "FAQs", to: "faq" },
     { name: "About Us", to: "about" },
   ];
 
