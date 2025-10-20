@@ -1,9 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+  /* Vibrant Retro Pastels */
+  --color-primary: #5B7BDA;      /* Stronger blue */
+  --color-secondary: #FF7A6B;    /* Vivid coral */
+  --color-accent1: #4EC9B0;      /* Bright teal-mint */
+  --color-accent2: #FFC857;      /* Warm golden yellow */
+  --color-neutral-dark: #44446A; /* Deep slate */
+  --color-neutral-light: #F8F9FA;/* Softer off-white */
+  
+  /* Border colors */
+  --color-border-light: rgba(68, 68, 106, 0.2);
+  --color-border-dark: rgba(68, 68, 106, 0.35);
+  --color-border-hover: rgba(91, 123, 218, 0.5);
+  
+  /* Component variables */
+  --color-card-bg: #FFFFFF;
+  --color-card-hover: #F4F2EE;
+  --color-text-primary: #2D2D4F;
+  --color-text-secondary: #555577;
+  --card-shadow: 0 4px 8px rgba(68, 68, 106, 0.15);
+}
+
+.dark {
+  --color-primary: #88A7FF;      /* Vibrant periwinkle */
+  --color-secondary: #FF9A8A;    /* Bright salmon */
+  --color-accent1: #66E0C0;      /* Electric mint */
+  --color-accent2: #FFD67A;      /* Sunny pastel yellow */
+  --color-neutral-dark: #E2E2F2; /* Soft lavender gray */
+  --color-neutral-light: #2B2C3E;/* Rich dark navy */
+  
+  /* Border colors */
+  --color-border-light: rgba(226, 226, 242, 0.2);
+  --color-border-dark: rgba(226, 226, 242, 0.35);
+  --color-border-hover: rgba(136, 167, 255, 0.5);
+  
+  /* Component variables */
+  --color-card-bg: #222335;
+  --color-card-hover: #2E2F45;
+  --color-text-primary: #E8E8FA;
+  --color-text-secondary: #B0B0CC;
+  --card-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Apply base styles */
+body {
+  background-color: var(--color-neutral-light);
+  color: var(--color-neutral-dark);
+  font-family: 'Space Grotesk', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* NEW: Utility classes for borders */
+.border-light {
+  border-color: var(--color-border-light);
+}
+
+.border-dark {
+  border-color: var(--color-border-dark);
+}
+
+.border-hover {
+  border-color: var(--color-border-hover);
+}
+
+/* NEW: Enhanced card styles */
+.lego-card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.lego-card:hover {
+  background-color: var(--color-card-hover);
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* NEW: Improved lego button effect */
+.lego-button {
+  border-bottom-width: 4px;
+  border-color: var(--color-border-dark);
+  transition: all 0.15s ease;
+}
+
+.lego-button:hover {
+  border-bottom-width: 2px;
+  margin-top: 2px;
+}
+
+.lego-button:active {
+  border-bottom-width: 0px;
+  margin-top: 4px;
+}
+
+/* NEW: Text contrast utilities */
+.text-contrast-high {
+  color: var(--color-text-primary);
+}
+
+.text-contrast-medium {
+  color: var(--color-text-secondary);
+}
+
+/* Your existing Tailwind directives */
 @import "tailwindcss";
 
 @layer utilities {
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -11,6 +124,7 @@
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ArrowDown, ArrowUp, Clock } from "lucide-react";
 import { Link } from "react-scroll";
+import { ThemeContext } from "../context/ThemeContext";
 import LitecoinLogo from "../assets/ltc.svg";
 import UsdtLogo from "../assets/usdt.svg";
 import EthereumLogo from "../assets/eth.svg";
@@ -9,9 +10,11 @@ import XrpLogo from "../assets/xrp.svg";
 import BnbLogo from "../assets/bnb.svg";
 import DogeLogo from "../assets/doge.svg";
 
-import HeroBackground from "../assets/hero-background.png";
+import DayBackground from "../assets/day_bg.jpeg";
+import NightBackground from "../assets/night_bg.jpeg";
 
 const Hero = () => {
+  const { darkMode } = useContext(ThemeContext);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
   );
@@ -57,13 +60,25 @@ const Hero = () => {
   ];
 
   return (
-<section
-  id="hero"
-  className="pt-20 md:pt-24 pb-12 md:pb-16 relative overflow-hidden flex flex-col items-center justify-center text-center min-h-screen bg-cover bg-center"
-  style={{ backgroundImage: `url(${HeroBackground})` }}
->
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/10 to-gray-100/10 dark:from-gray-900/40 dark:to-gray-800/40 z-0"></div>
+    <section
+      id="hero"
+      className="pt-20 md:pt-24 pb-12 md:pb-16 relative overflow-hidden flex flex-col items-center justify-center text-center min-h-screen bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${darkMode ? NightBackground : DayBackground})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Background overlay */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: darkMode
+            ? "linear-gradient(135deg, rgba(43, 44, 62, 0.3) 0%, rgba(34, 35, 53, 0.5) 100%)"
+            : "linear-gradient(135deg, rgba(248, 249, 250, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%)",
+        }}
+      ></div>
       {/* Enhanced background floating & animated crypto logos */}
       <div className="absolute inset-0 overflow-hidden z-0">
         {logoPositions.map((position, index) => {
@@ -316,13 +331,16 @@ const Hero = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-          <span className="text-gray-800 dark:text-gray-100">Premium </span>
-          <span className="text-green-600 dark:text-green-400">Crypto</span>
-          <span className="text-amber-500 dark:text-amber-400"> Signals</span>
+          <span style={{ color: "var(--color-text-primary)" }}>Premium </span>
+          <span style={{ color: "var(--color-primary)" }}>Crypto</span>
+          <span style={{ color: "var(--color-accent2)" }}> Signals</span>
         </h1>
 
         {/* Subheading */}
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+        <p
+          className="text-xl mb-8 max-w-2xl mx-auto"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
           Join the fastest-growing crypto trading community. Accurate signals,
           real profits, zero fluff.
         </p>
@@ -331,87 +349,153 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <a
             href="#plans"
-            className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center cursor-pointer"
+            className="px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center cursor-pointer lego-button"
+            style={{
+              background: "var(--color-accent2)",
+              color: "var(--color-neutral-light)",
+              borderColor: "var(--color-border-dark)",
+            }}
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('plans').scrollIntoView({ behavior: 'smooth' });
+              document
+                .getElementById("plans")
+                .scrollIntoView({ behavior: "smooth" });
             }}
           >
             Join Premium Group
           </a>
           <a
-          href="https://chat.whatsapp.com/Bpbzs4D8XAkHGm38CLbN3l"
+            href="https://chat.whatsapp.com/Bpbzs4D8XAkHGm38CLbN3l"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center"
+            className="px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center lego-button"
+            style={{
+              background: "var(--color-primary)",
+              color: "var(--color-neutral-light)",
+              borderColor: "var(--color-border-dark)",
+            }}
           >
             Try Free Channel
           </a>
         </div>
-{/* Signal Card */}
-<div className="mx-auto w-full max-w-md 
-  bg-white/20 dark:bg-gray-800/30 
+        {/* Signal Card */}
+        <div
+          className="mx-auto w-full max-w-md 
   backdrop-blur-xl 
   rounded-2xl 
-  border border-white/40 dark:border-gray-600 
   shadow-lg 
   p-6 
   transform transition-all 
   hover:scale-105 
-  hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] 
-  animate-card-float">
+  animate-card-float lego-card"
+          style={{
+            borderColor: "var(--color-border-light)",
+            boxShadow: "var(--card-shadow)",
+          }}
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h3
+              className="text-lg font-semibold"
+              style={{ color: "var(--color-text-primary)" }}
+            >
+              Latest Signal
+            </h3>
+            <span
+              className="px-3 py-1 rounded-full text-sm font-medium"
+              style={{
+                backgroundColor: "var(--color-primary)",
+                color: "var(--color-neutral-light)",
+              }}
+            >
+              New
+            </span>
+          </div>
 
-  <div className="flex justify-between items-center mb-4">
-    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-      Latest Signal
-    </h3>
-    <span className="px-3 py-1 bg-green-500/30 text-green-300 rounded-full text-sm font-medium">
-      New
-    </span>
-  </div>
+          <div className="mb-4 space-y-3">
+            <div className="flex justify-between">
+              <span style={{ color: "var(--color-text-secondary)" }}>Pair</span>
+              <span
+                className="font-semibold"
+                style={{ color: "var(--color-text-primary)" }}
+              >
+                {signal.coin}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span style={{ color: "var(--color-text-secondary)" }}>
+                Entry Price
+              </span>
+              <span
+                className="font-semibold"
+                style={{ color: "var(--color-text-primary)" }}
+              >
+                ${signal.entryPrice.toFixed(2)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span style={{ color: "var(--color-text-secondary)" }}>
+                Target
+              </span>
+              <span
+                className="flex items-center font-semibold"
+                style={{ color: "var(--color-accent1)" }}
+              >
+                ${signal.targetPrice.toFixed(2)}
+                <ArrowUp className="ml-1 h-4 w-4" />
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span style={{ color: "var(--color-text-secondary)" }}>
+                Stop Loss
+              </span>
+              <span
+                className="flex items-center font-semibold"
+                style={{ color: "var(--color-secondary)" }}
+              >
+                ${signal.stopLoss.toFixed(2)}
+                <ArrowDown className="ml-1 h-4 w-4" />
+              </span>
+            </div>
+          </div>
 
-  <div className="mb-4 space-y-3">
-    <div className="flex justify-between">
-      <span className="text-slate-600 dark:text-slate-300">Pair</span>
-      <span className="font-semibold text-slate-900 dark:text-white">{signal.coin}</span>
-    </div>
-    <div className="flex justify-between">
-      <span className="text-slate-600 dark:text-slate-300">Entry Price</span>
-      <span className="font-semibold text-slate-900 dark:text-white">${signal.entryPrice.toFixed(2)}</span>
-    </div>
-    <div className="flex justify-between">
-      <span className="text-slate-600 dark:text-slate-300">Target</span>
-      <span className="flex items-center font-semibold text-green-500">
-        ${signal.targetPrice.toFixed(2)}
-        <ArrowUp className="ml-1 h-4 w-4" />
-      </span>
-    </div>
-    <div className="flex justify-between">
-      <span className="text-slate-600 dark:text-slate-300">Stop Loss</span>
-      <span className="flex items-center font-semibold text-red-500">
-        ${signal.stopLoss.toFixed(2)}
-        <ArrowDown className="ml-1 h-4 w-4" />
-      </span>
-    </div>
-  </div>
-
-  <div className="pt-4 border-t border-white/40 dark:border-gray-600 flex justify-between items-center">
-    <div className="flex items-center text-slate-500 dark:text-slate-400">
-      <Clock className="h-4 w-4 mr-1" />
-      <span className="text-sm">{signal.time}</span>
-    </div>
-    <div className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-sm font-medium">
-      +{profitPercentage}% Potential
-    </div>
-  </div>
-</div>
+          <div
+            className="pt-4 flex justify-between items-center"
+            style={{
+              borderTopColor: "var(--color-border-light)",
+              borderTopWidth: "1px",
+              borderTopStyle: "solid",
+            }}
+          >
+            <div
+              className="flex items-center"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              <Clock className="h-4 w-4 mr-1" />
+              <span className="text-sm">{signal.time}</span>
+            </div>
+            <div
+              className="px-2 py-1 rounded text-sm font-medium"
+              style={{
+                backgroundColor: "var(--color-accent1)",
+                color: "var(--color-neutral-light)",
+              }}
+            >
+              +{profitPercentage}% Potential
+            </div>
+          </div>
+        </div>
         {/* Learn More link */}
         <Link
           to="features"
           spy={true}
           smooth={true}
           duration={500}
-          className="flex justify-center items-center mt-8 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 cursor-pointer transition-colors animate-pulse"
+          className="flex justify-center items-center mt-8 cursor-pointer transition-colors animate-pulse"
+          style={{ color: "var(--color-text-secondary)" }}
+          onMouseEnter={(e) => (e.target.style.color = "var(--color-primary)")}
+          onMouseLeave={(e) =>
+            (e.target.style.color = "var(--color-text-secondary)")
+          }
         >
           <span className="mr-2">Learn More</span>
           <ArrowDown className="h-4 w-4 animate-bounce" />

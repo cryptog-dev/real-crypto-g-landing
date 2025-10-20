@@ -36,20 +36,23 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-20 bg-gray-50 dark:bg-slate-900 relative overflow-hidden">
+    <section id="features" className="py-20 relative overflow-hidden"
+             style={{ backgroundColor: 'var(--color-neutral-light)' }}>
       {/* Background accents */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-20 left-1/4 w-80 h-80 bg-green-400/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-1/4 w-80 h-80 rounded-full blur-3xl"
+             style={{ backgroundColor: 'var(--color-primary)', opacity: 0.1 }}></div>
+        <div className="absolute bottom-20 right-1/4 w-80 h-80 rounded-full blur-3xl"
+             style={{ backgroundColor: 'var(--color-accent2)', opacity: 0.1 }}></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          <span className="text-gray-800 dark:text-gray-100">Our </span>
-          <span className="text-green-600 dark:text-green-400">Core </span>
-          <span className="text-amber-500 dark:text-amber-400">Features</span>
+          <span style={{ color: 'var(--color-text-primary)' }}>Our </span>
+          <span style={{ color: 'var(--color-primary)' }}>Core </span>
+          <span style={{ color: 'var(--color-accent2)' }}>Features</span>
         </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-14">
+        <p className="text-lg max-w-3xl mx-auto mb-14" style={{ color: 'var(--color-text-secondary)' }}>
           Designed to give you an edge in crypto trading with clarity, speed, and accuracy.
         </p>
 
@@ -57,20 +60,19 @@ const Features = () => {
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="flex flex-col justify-between p-8 rounded-xl border border-white/20 dark:border-white/10
-                         bg-white/30 dark:bg-gray-800/30 backdrop-blur-2xl
+              className="flex flex-col justify-between p-8 rounded-xl backdrop-blur-2xl
                          shadow-md hover:shadow-xl
-                         transition-all duration-300 hover:scale-105 hover:border-green-400/40"
+                         transition-all duration-300 hover:scale-105 lego-card"
             >
               <div>
-                <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-xl 
-                                bg-gradient-to-br from-green-500/10 to-amber-500/10">
+                <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-xl"
+                     style={{ backgroundColor: 'var(--color-card-hover)' }}>
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">
+                <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                   {feature.description}
                 </p>
               </div>

@@ -6,6 +6,7 @@ import Features from "./components/Features";
 import Plans from "./components/Plans";
 import MarketData from "./components/MarketData";
 import ChartSection from "./components/ChartSection";
+import FAQ from "./components/FAQ";
 // import BlogSection from "../components/shared/BlogSection";
 import AboutUs from "./components/AboutUs";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -16,13 +17,20 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <div
+          className="min-h-screen"
+          style={{
+            backgroundColor: "var(--color-neutral-light)",
+            color: "var(--color-neutral-dark)",
+          }}
+        >
           <Navbar isAppView={false} />
           <Hero />
           <Features />
           <Plans />
           <MarketData />
           <ChartSection />
+          <FAQ />
           {/* <BlogSection /> */}
           <AboutUs />
           <Footer />

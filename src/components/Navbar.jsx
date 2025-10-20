@@ -47,6 +47,7 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
         { name: "Features", to: "features", isLink: true },
         { name: "Plans", to: "plans", isLink: true },
         { name: "Market", to: "market", isLink: true },
+        { name: "FAQ", to: "faq", isLink: true },
         { name: "About Us", to: "about", isLink: true },
       ];
 
@@ -67,40 +68,49 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isAppView
-          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md"
+          ? "backdrop-blur-md shadow-md"
           : scrolled
-          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md"
+          ? "backdrop-blur-md shadow-md"
           : "bg-transparent"
       }`}
+      style={{
+        backgroundColor:
+          isAppView || scrolled ? "var(--color-card-bg)" : "transparent",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18">
           <div className="flex items-center">
             {isAppView ? (
               <div className="flex items-center cursor-pointer">
-                <img 
-                  className="h-10 w-auto sm:h-12 transition-all duration-300" 
-                  src={Logo} 
+                <img
+                  className="h-10 w-auto sm:h-12 transition-all duration-300"
+                  src={Logo}
                   alt="Logo"
                   style={{
-                    maxHeight: '48px',
-                    width: 'auto',
-                    height: 'auto',
-                    objectFit: 'contain'
+                    maxHeight: "48px",
+                    width: "auto",
+                    height: "auto",
+                    objectFit: "contain",
                   }}
                 />
               </div>
             ) : (
-              <Link to="hero" smooth={true} duration={500} className="flex items-center">
-                <img 
-                  className="h-10 w-auto sm:h-12 transition-all duration-300" 
-                  src={Logo} 
+              <Link
+                to="hero"
+                smooth={true}
+                duration={500}
+                className="flex items-center"
+              >
+                <img
+                  className="h-10 w-auto sm:h-12 transition-all duration-300"
+                  src={Logo}
                   alt="Logo"
                   style={{
-                    maxHeight: '48px',
-                    width: 'auto',
-                    height: 'auto',
-                    objectFit: 'contain'
+                    maxHeight: "48px",
+                    width: "auto",
+                    height: "auto",
+                    objectFit: "contain",
                   }}
                 />
               </Link>
@@ -120,7 +130,17 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
                       smooth={true}
                       offset={-70}
                       duration={500}
-                      className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-medium cursor-pointer transition-colors"
+                      className="text-contrast-medium hover:text-contrast-high font-medium cursor-pointer transition-colors"
+                      style={{
+                        color: "var(--color-text-secondary)",
+                        "--hover-color": "var(--color-primary)",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.target.style.color = "var(--color-primary)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.color = "var(--color-text-secondary)")
+                      }
                     >
                       {link.name}
                     </Link>
@@ -128,10 +148,24 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
                     <button
                       onClick={() => handleNavClick(link)}
                       className={`font-medium cursor-pointer transition-colors ${
-                        activeTab === link.to
-                          ? "text-green-600 dark:text-green-400"
-                          : "text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+                        activeTab === link.to ? "text-contrast-high" : ""
                       }`}
+                      style={{
+                        color:
+                          activeTab === link.to
+                            ? "var(--color-primary)"
+                            : "var(--color-text-secondary)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (activeTab !== link.to) {
+                          e.target.style.color = "var(--color-primary)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (activeTab !== link.to) {
+                          e.target.style.color = "var(--color-text-secondary)";
+                        }
+                      }}
                     >
                       {link.name}
                     </button>
@@ -140,7 +174,16 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
               ))}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="p-2 rounded-full transition-colors"
+                style={{
+                  backgroundColor: "transparent",
+                }}
+                onMouseEnter={(e) =>
+                  (e.target.style.backgroundColor = "var(--color-card-hover)")
+                }
+                onMouseLeave={(e) =>
+                  (e.target.style.backgroundColor = "transparent")
+                }
                 aria-label="Toggle theme"
               >
                 {darkMode ? (
@@ -178,7 +221,12 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
               ) : (
                 <a
                   href={loginUrl}
-                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-md font-medium transition-all hover:shadow-lg inline-block"
+                  className="px-4 py-2 rounded-md font-medium transition-all hover:shadow-lg inline-block lego-button"
+                  style={{
+                    background: "var(--color-primary)",
+                    color: "var(--color-neutral-light)",
+                    borderColor: "var(--color-border-dark)",
+                  }}
                 >
                   Login
                 </a>
@@ -201,7 +249,19 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
             </button>
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              className="inline-flex items-center justify-center p-2 rounded-md transition-colors"
+              style={{
+                color: "var(--color-text-secondary)",
+                backgroundColor: "transparent",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.color = "var(--color-text-primary)";
+                e.target.style.backgroundColor = "var(--color-card-hover)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.color = "var(--color-text-secondary)";
+                e.target.style.backgroundColor = "transparent";
+              }}
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
@@ -217,7 +277,10 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
 
       {/* Mobile menu */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-gray-900 shadow-lg">
+        <div
+          className="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-lg"
+          style={{ backgroundColor: "var(--color-card-bg)" }}
+        >
           {navLinks.map((link) => (
             <div key={link.name}>
               {link.isLink ? (
@@ -228,7 +291,19 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
                   smooth={true}
                   offset={-70}
                   duration={500}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className="block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                  style={{
+                    color: "var(--color-text-secondary)",
+                    backgroundColor: "transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "var(--color-primary)";
+                    e.target.style.backgroundColor = "var(--color-card-hover)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = "var(--color-text-secondary)";
+                    e.target.style.backgroundColor = "transparent";
+                  }}
                   onClick={toggleMenu}
                 >
                   {link.name}
@@ -236,11 +311,30 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
               ) : (
                 <button
                   onClick={() => handleNavClick(link)}
-                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    activeTab === link.to
-                      ? "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900"
-                      : "text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                  }`}
+                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                  style={{
+                    color:
+                      activeTab === link.to
+                        ? "var(--color-primary)"
+                        : "var(--color-text-secondary)",
+                    backgroundColor:
+                      activeTab === link.to
+                        ? "var(--color-card-hover)"
+                        : "transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== link.to) {
+                      e.target.style.color = "var(--color-primary)";
+                      e.target.style.backgroundColor =
+                        "var(--color-card-hover)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== link.to) {
+                      e.target.style.color = "var(--color-text-secondary)";
+                      e.target.style.backgroundColor = "transparent";
+                    }
+                  }}
                 >
                   {link.name}
                 </button>
@@ -269,14 +363,18 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
           ) : (
             <a
               href={loginUrl}
-              className="block w-full text-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-md font-medium transition-all mt-3"
+              className="block w-full text-center px-4 py-2 rounded-md font-medium transition-all mt-3 lego-button"
+              style={{
+                background: "var(--color-primary)",
+                color: "var(--color-neutral-light)",
+                borderColor: "var(--color-border-dark)",
+              }}
             >
               Login
             </a>
           )}
         </div>
       </div>
-
     </nav>
   );
 };

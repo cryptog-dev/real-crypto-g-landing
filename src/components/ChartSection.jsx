@@ -77,38 +77,58 @@ const ChartSection = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-white dark:bg-gray-800 relative overflow-hidden">
+    <section className="py-16 md:py-24 relative overflow-hidden"
+             style={{ backgroundColor: 'var(--color-card-bg)' }}>
       {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-green-400/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-0 w-72 h-72 bg-amber-400/5 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl"
+           style={{ backgroundColor: 'var(--color-primary)', opacity: 0.05 }}></div>
+      <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full blur-3xl"
+           style={{ backgroundColor: 'var(--color-accent2)', opacity: 0.05 }}></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-gray-800 dark:text-gray-100">Interactive </span>
-            <span className="text-amber-500 dark:text-amber-400">Price </span>
-            <span className="text-green-600 dark:text-green-400">Charts</span>
+            <span style={{ color: 'var(--color-text-primary)' }}>Interactive </span>
+            <span style={{ color: 'var(--color-accent2)' }}>Price </span>
+            <span style={{ color: 'var(--color-primary)' }}>Charts</span>
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg max-w-3xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
             Analyze price movements, identify trends, and make informed trading decisions with our interactive charts.
           </p>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-          <div className="p-4 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <div className="rounded-xl shadow-md overflow-hidden lego-card">
+          <div className="p-4"
+               style={{
+                 backgroundColor: 'var(--color-card-hover)',
+                 borderBottomColor: 'var(--color-border-light)',
+                 borderBottomWidth: '1px',
+                 borderBottomStyle: 'solid'
+               }}>
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Select Coin</label>
+                <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Select Coin</label>
                 <div className="flex space-x-2">
                   {coins.map((coin) => (
                     <button
                       key={coin.id}
                       onClick={() => setSelectedCoin(coin.id)}
-                      className={`px-3 py-1 rounded-md text-sm font-medium ${
-                        selectedCoin === coin.id
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
-                      } transition-colors`}
+                      className="px-3 py-1 rounded-md text-sm font-medium transition-colors"
+                      style={{
+                        backgroundColor: selectedCoin === coin.id ? 'var(--color-primary)' : 'var(--color-card-hover)',
+                        color: selectedCoin === coin.id ? 'var(--color-neutral-light)' : 'var(--color-text-primary)',
+                        borderColor: 'var(--color-border-light)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedCoin !== coin.id) {
+                          e.target.style.backgroundColor = 'var(--color-card-bg)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedCoin !== coin.id) {
+                          e.target.style.backgroundColor = 'var(--color-card-hover)'
+                        }
+                      }}
                     >
                       {coin.name}
                     </button>
@@ -117,17 +137,28 @@ const ChartSection = () => {
               </div>
               
               <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Timeframe</label>
+                <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Timeframe</label>
                 <div className="flex space-x-2">
                   {timeframes.map((tf) => (
                     <button
                       key={tf.id}
                       onClick={() => setTimeframe(tf.id)}
-                      className={`px-3 py-1 rounded-md text-sm font-medium ${
-                        timeframe === tf.id
-                          ? 'bg-amber-500 text-white'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
-                      } transition-colors`}
+                      className="px-3 py-1 rounded-md text-sm font-medium transition-colors"
+                      style={{
+                        backgroundColor: timeframe === tf.id ? 'var(--color-accent2)' : 'var(--color-card-hover)',
+                        color: timeframe === tf.id ? 'var(--color-neutral-light)' : 'var(--color-text-primary)',
+                        borderColor: 'var(--color-border-light)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (timeframe !== tf.id) {
+                          e.target.style.backgroundColor = 'var(--color-card-bg)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (timeframe !== tf.id) {
+                          e.target.style.backgroundColor = 'var(--color-card-hover)'
+                        }
+                      }}
                     >
                       {tf.name}
                     </button>
@@ -141,7 +172,7 @@ const ChartSection = () => {
         </div>
         
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Charts powered by TradingView • Data delayed by 10 minutes
           </p>
         </div>

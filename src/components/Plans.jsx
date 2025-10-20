@@ -53,43 +53,43 @@ const Plans = () => {
     },
   ];
 
-  const getButtonClasses = (color) => {
-    const baseClasses =
-      "w-full py-3 px-4 rounded-md font-medium transition-all text-white text-center";
-
-    const colorClasses = {
-      green:
-        "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-lg",
-      blue: "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 hover:shadow-lg",
-      amber:
-        "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg",
-
-      gold:
-        "bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 hover:shadow-lg"
+  const getButtonStyle = (color) => {
+    const colorMap = {
+      green: 'var(--color-primary)',
+      blue: 'var(--color-primary)',
+      amber: 'var(--color-accent2)',
+      gold: 'var(--color-accent2)'
     };
-
-    return `${baseClasses} ${colorClasses[color] || colorClasses.blue}`;
+    
+    return {
+      background: colorMap[color] || colorMap.blue,
+      color: 'var(--color-neutral-light)',
+      borderColor: 'var(--color-border-dark)'
+    };
   };
 
   return (
     <section
       id="plans"
-      className="py-16 md:py-24 bg-white dark:bg-gray-800 relative overflow-hidden"
+      className="py-16 md:py-24 relative overflow-hidden"
+      style={{ backgroundColor: 'var(--color-card-bg)' }}
     >
       {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-amber-400/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-green-400/5 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl"
+           style={{ backgroundColor: 'var(--color-accent2)', opacity: 0.05 }}></div>
+      <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl"
+           style={{ backgroundColor: 'var(--color-primary)', opacity: 0.05 }}></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-gray-800 dark:text-gray-100">
+            <span style={{ color: 'var(--color-text-primary)' }}>
               Choose Your{" "}
             </span>
-            <span className="text-amber-500 dark:text-amber-400">Trading </span>
-            <span className="text-green-600 dark:text-green-400">Plan</span>
+            <span style={{ color: 'var(--color-accent2)' }}>Trading </span>
+            <span style={{ color: 'var(--color-primary)' }}>Plan</span>
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg max-w-3xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
             Select the plan that fits your trading style and goals. Upgrade or
             downgrade anytime as your needs change.
           </p>
@@ -105,27 +105,28 @@ const Plans = () => {
                   : "shadow-md hover:shadow-xl transform hover:-translate-y-1"
               }`}
             >
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden h-full flex flex-col">
+              <div className="rounded-xl overflow-hidden h-full flex flex-col lego-card">
                 {plan.popular && (
-                  <div className="bg-blue-500 text-white py-1 px-4 text-sm font-medium text-center">
+                  <div className="py-1 px-4 text-sm font-medium text-center"
+                       style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-neutral-light)' }}>
                     Most Popular
                   </div>
                 )}
 
                 <div className="p-6 flex-grow">
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+                  <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text-primary)' }}>
                     {plan.name}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  <p className="mb-6" style={{ color: 'var(--color-text-secondary)' }}>
                     {plan.description}
                   </p>
 
                   <div className="mb-6">
-                    <span className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+                    <span className="text-4xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
                       {plan.price}
                     </span>
                     {plan.period && (
-                      <span className="text-gray-500 dark:text-gray-400 ml-2">
+                      <span className="ml-2" style={{ color: 'var(--color-text-secondary)' }}>
                         {plan.period}
                       </span>
                     )}
@@ -137,7 +138,7 @@ const Plans = () => {
                         <Check
                           className={`h-5 w-5 mr-2 text-${plan.color}-500 flex-shrink-0 mt-0.5`}
                         />
-                        <span className="text-gray-600 dark:text-gray-300">
+                        <span style={{ color: 'var(--color-text-secondary)' }}>
                           {feature}
                         </span>
                       </li>
@@ -150,7 +151,8 @@ const Plans = () => {
                     href={plan.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={getButtonClasses(plan.color)}
+                    className="w-full py-3 px-4 rounded-md font-medium transition-all text-center lego-button"
+                    style={getButtonStyle(plan.color)}
                   >
                     {plan.buttonText}
                   </a>
