@@ -27,18 +27,29 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const signal = {
-    coin: "ETH/USDT",
-    entryPrice: 3450.75,
-    targetPrice: 3680.0,
-    stopLoss: 3350.0,
-    time: currentTime,
-  };
-
-  const profitPercentage = (
-    ((signal.targetPrice - signal.entryPrice) / signal.entryPrice) *
-    100
-  ).toFixed(2);
+  const signals = [
+    {
+      coin: "ETH/USDT",
+      entryPrice: 3450.75,
+      targetPrice: 3680.0,
+      stopLoss: 3350.0,
+      time: currentTime,
+    },
+    {
+      coin: "BTC/USDT",
+      entryPrice: 90700.0,
+      targetPrice: 94500.0,
+      stopLoss: 88900.0,
+      time: currentTime,
+    },
+    {
+      coin: "SOL/USDT",
+      entryPrice: 188.5,
+      targetPrice: 205.0,
+      stopLoss: 179.0,
+      time: currentTime,
+    },
+  ];
 
   // Pre-defined positions for better dispersion and zen-like spacing
   const logoPositions = [
@@ -398,7 +409,7 @@ const Hero = () => {
               className="text-lg font-semibold"
               style={{ color: "var(--color-text-primary)" }}
             >
-              Latest Signal
+              Latest Signals
             </h3>
             <span
               className="px-3 py-1 rounded-full text-sm font-medium"
@@ -407,81 +418,96 @@ const Hero = () => {
                 color: "var(--color-neutral-light)",
               }}
             >
-              New
+              Live
             </span>
           </div>
 
-          <div className="mb-4 space-y-3">
-            <div className="flex justify-between">
-              <span style={{ color: "var(--color-text-secondary)" }}>Pair</span>
-              <span
-                className="font-semibold"
-                style={{ color: "var(--color-text-primary)" }}
-              >
-                {signal.coin}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span style={{ color: "var(--color-text-secondary)" }}>
-                Entry Price
-              </span>
-              <span
-                className="font-semibold"
-                style={{ color: "var(--color-text-primary)" }}
-              >
-                ${signal.entryPrice.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span style={{ color: "var(--color-text-secondary)" }}>
-                Target
-              </span>
-              <span
-                className="flex items-center font-semibold"
-                style={{ color: "var(--color-accent1)" }}
-              >
-                ${signal.targetPrice.toFixed(2)}
-                <ArrowUp className="ml-1 h-4 w-4" />
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span style={{ color: "var(--color-text-secondary)" }}>
-                Stop Loss
-              </span>
-              <span
-                className="flex items-center font-semibold"
-                style={{ color: "var(--color-secondary)" }}
-              >
-                ${signal.stopLoss.toFixed(2)}
-                <ArrowDown className="ml-1 h-4 w-4" />
-              </span>
-            </div>
-          </div>
+          <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
+            {signals.map((sig, index) => {
+              const profitPercentage = (
+                ((sig.targetPrice - sig.entryPrice) / sig.entryPrice) *
+                100
+              ).toFixed(2);
 
-          <div
-            className="pt-4 flex justify-between items-center"
-            style={{
-              borderTopColor: "var(--color-border-light)",
-              borderTopWidth: "1px",
-              borderTopStyle: "solid",
-            }}
-          >
-            <div
-              className="flex items-center"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
-              <Clock className="h-4 w-4 mr-1" />
-              <span className="text-sm">{signal.time}</span>
-            </div>
-            <div
-              className="px-2 py-1 rounded text-sm font-medium"
-              style={{
-                backgroundColor: "var(--color-accent1)",
-                color: "var(--color-neutral-light)",
-              }}
-            >
-              +{profitPercentage}% Potential
-            </div>
+              return (
+                <div
+                  key={sig.coin + index}
+                  className="rounded-xl px-3 py-3 flex flex-col gap-2"
+                  style={{
+                    backgroundColor: "var(--color-card-hover)",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    borderColor: "var(--color-border-light)",
+                  }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      {sig.coin}
+                    </span>
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-medium"
+                      style={{
+                        backgroundColor: "var(--color-accent1)",
+                        color: "var(--color-neutral-light)",
+                      }}
+                    >
+                      +{profitPercentage}%
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-xs">
+                    <span style={{ color: "var(--color-text-secondary)" }}>
+                      Entry
+                    </span>
+                    <span style={{ color: "var(--color-text-primary)" }}>
+                      ${sig.entryPrice.toFixed(2)}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs">
+                    <span style={{ color: "var(--color-text-secondary)" }}>
+                      Target
+                    </span>
+                    <span
+                      className="flex items-center font-medium"
+                      style={{ color: "var(--color-accent1)" }}
+                    >
+                      ${sig.targetPrice.toFixed(2)}
+                      <ArrowUp className="ml-1 h-3 w-3" />
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs">
+                    <span style={{ color: "var(--color-text-secondary)" }}>
+                      Stop
+                    </span>
+                    <span
+                      className="flex items-center font-medium"
+                      style={{ color: "var(--color-secondary)" }}
+                    >
+                      ${sig.stopLoss.toFixed(2)}
+                      <ArrowDown className="ml-1 h-3 w-3" />
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center mt-1">
+                    <span
+                      className="text-[10px]"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      Updated {sig.time}
+                    </span>
+                    <div
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "var(--color-accent1)" }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
         {/* Learn More link */}
