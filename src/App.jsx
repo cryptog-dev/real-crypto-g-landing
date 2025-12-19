@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
+import AccessApp from "./components/AccessApp";
 import Features from "./components/Features";
 import Plans from "./components/Plans";
 import MarketData from "./components/MarketData";
@@ -26,6 +27,7 @@ function App() {
         >
           <Navbar isAppView={false} />
           <Hero />
+          <AccessApp />
           <Features />
           <Plans />
           <MarketData />

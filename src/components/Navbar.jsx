@@ -45,6 +45,7 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
         ]
     : [
         { name: "Features", to: "features", isLink: true },
+        { name: "Access App", to: "access-app", isLink: true },
         { name: "Plans", to: "plans", isLink: true },
         { name: "Market", to: "market", isLink: true },
         { name: "FAQ", to: "faq", isLink: true },
