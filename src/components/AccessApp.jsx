@@ -294,7 +294,7 @@ const AccessApp = () => {
                   style={{
                     borderColor: "var(--color-border-light)",
                     boxShadow: "var(--card-shadow)",
-                    ...(!isVisible && { opacity: 0 }),
+                    ...(isVisible ? {} : { opacity: 0 }),
                   }}
                 >
                   <div className="flex items-start gap-3">
