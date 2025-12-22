@@ -91,16 +91,16 @@ const Hero = () => {
         }}
       ></div>
 
-      {/* Christmas Snowflakes Animation */}
+      {/* Christmas Snowflakes Animation - Reduced on mobile */}
       <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-        {[...Array(30)].map((_, i) => (
+        {[...Array(window.innerWidth < 640 ? 15 : 30)].map((_, i) => (
           <div
             key={i}
             className="absolute text-white opacity-60 animate-snowflake"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 10 + 10}px`,
+              fontSize: `${Math.random() * (window.innerWidth < 640 ? 8 : 10) + 8}px`,
               animationDelay: `${Math.random() * 5}s`,
               animationDuration: `${Math.random() * 3 + 5}s`,
             }}
