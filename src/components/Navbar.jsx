@@ -66,19 +66,123 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isAppView
-          ? "backdrop-blur-md shadow-md"
-          : scrolled
-          ? "backdrop-blur-md shadow-md"
-          : "bg-transparent"
-      }`}
-      style={{
-        backgroundColor:
-          isAppView || scrolled ? "var(--color-card-bg)" : "transparent",
-      }}
-    >
+    <>
+      <style>
+        {`
+          /* Ice Effect for Navbar Buttons */
+          .christmas-nav-button-ice {
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .christmas-nav-button-ice::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+              45deg,
+              transparent 30%,
+              rgba(255, 255, 255, 0.3) 50%,
+              transparent 70%
+            );
+            animation: ice-shine-nav 3s infinite;
+            pointer-events: none;
+          }
+          
+          .christmas-nav-button-ice::after {
+            content: '❄';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            font-size: 10px;
+            opacity: 0.8;
+            animation: ice-sparkle-nav 2s infinite;
+          }
+          
+          @keyframes ice-shine-nav {
+            0% {
+              transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+              transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+          }
+          
+          @keyframes ice-sparkle-nav {
+            0%, 100% {
+              opacity: 0.8;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 1;
+              transform: scale(1.2);
+            }
+          }
+          
+          /* Santa Hat Animation for Navbar */
+          .santa-hat-nav {
+            display: inline-block;
+            margin-right: 4px;
+            animation: santa-bounce-nav 2s ease-in-out infinite;
+            font-size: 1em;
+          }
+          
+          @keyframes santa-bounce-nav {
+            0%, 100% {
+              transform: translateY(0) rotate(0deg);
+            }
+            25% {
+              transform: translateY(-2px) rotate(-5deg);
+            }
+            75% {
+              transform: translateY(-2px) rotate(5deg);
+            }
+          }
+          
+          /* Ice Effect on Navbar */
+          nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.5),
+              transparent
+            );
+            animation: ice-border-nav 3s linear infinite;
+            pointer-events: none;
+          }
+          
+          @keyframes ice-border-nav {
+            0% {
+              transform: translateX(-100%);
+            }
+            100% {
+              transform: translateX(100%);
+            }
+          }
+        `}
+      </style>
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+          isAppView
+            ? "backdrop-blur-md shadow-md"
+            : scrolled
+            ? "backdrop-blur-md shadow-md"
+            : "bg-transparent"
+        }`}
+        style={{
+          backgroundColor:
+            isAppView || scrolled ? "var(--color-card-bg)" : "transparent",
+        }}
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18">
           <div className="flex items-center">
@@ -222,14 +326,14 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
               ) : (
                 <a
                   href={loginUrl}
-                  className="px-4 py-2 rounded-md font-medium transition-all hover:shadow-lg inline-block lego-button"
+                  className="px-4 py-2 rounded-md font-medium transition-all hover:shadow-lg inline-block lego-button christmas-nav-button-ice relative"
                   style={{
                     background: "var(--color-primary)",
                     color: "var(--color-neutral-light)",
                     borderColor: "var(--color-border-dark)",
                   }}
                 >
-                  Login
+                  <span className="santa-hat-nav">🎅</span> Login
                 </a>
               )}
             </div>
@@ -364,19 +468,20 @@ const Navbar = ({ isAppView = false, activeTab = null }) => {
           ) : (
             <a
               href={loginUrl}
-              className="block w-full text-center px-4 py-2 rounded-md font-medium transition-all mt-3 lego-button"
+              className="block w-full text-center px-4 py-2 rounded-md font-medium transition-all mt-3 lego-button christmas-nav-button-ice relative"
               style={{
                 background: "var(--color-primary)",
                 color: "var(--color-neutral-light)",
                 borderColor: "var(--color-border-dark)",
               }}
             >
-              Login
+              <span className="santa-hat-nav">🎅</span> Login
             </a>
           )}
         </div>
       </div>
     </nav>
+    </>
   );
 };
 
