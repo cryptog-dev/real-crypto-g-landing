@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { BookOpen, BarChart3, Signal, Receipt, ArrowRight } from "lucide-react";
 import { ThemeContext } from "../context/ThemeContext";
-import AppScreenshotDay from "../assets/app-screenshot.png";
-import AppScreenshotNight from "../assets/app-screenshot-n.png";
+import AppScreenshotDay from "../assets/app-screenshot.webp";
+import AppScreenshotNight from "../assets/app-screenshot-n.webp";
 
 const AccessApp = () => {
   const { darkMode } = useContext(ThemeContext);
