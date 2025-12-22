@@ -3,7 +3,7 @@ import { Link } from "react-scroll";
 import { ThemeContext } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { Menu, X, Sun, Moon, User, LogOut, Crown } from "lucide-react";
-import Logo from "../assets/logo3.png";
+import Logo from "../assets/logo3.webp";
 
 const Navbar = ({ isAppView = false, activeTab = null }) => {
   const [isOpen, setIsOpen] = useState(false);

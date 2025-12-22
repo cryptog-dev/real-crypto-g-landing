@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-scroll";
 import { Mail } from "lucide-react";
 import { FaTwitter, FaInstagram, FaTelegram } from "react-icons/fa";
-import Logo1 from "../assets/logo1.png";
+import Logo1 from "../assets/logo1.webp";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

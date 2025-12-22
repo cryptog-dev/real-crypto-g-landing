@@ -10,8 +10,8 @@ import XrpLogo from "../assets/xrp.svg";
 import BnbLogo from "../assets/bnb.svg";
 import DogeLogo from "../assets/doge.svg";
 
-import DayBackground from "../assets/day_bg.jpeg";
-import NightBackground from "../assets/night_bg.jpeg";
+import DayBackground from "../assets/day_bg.webp";
+import NightBackground from "../assets/night_bg.webp";
 
 const Hero = () => {
   const { darkMode } = useContext(ThemeContext);
