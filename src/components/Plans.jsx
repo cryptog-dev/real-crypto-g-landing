@@ -2,11 +2,13 @@ import React from "react";
 import { Check } from "lucide-react";
 
 const Plans = () => {
+  const DISCOUNT_PERCENT = 60;
+
   const plans = [
     {
       name: "1 Month Access",
       description: "Full access to premium signals and analytics for one month",
-      price: "$49",
+      originalPrice: 49,
       color: "blue",
       features: [
         "Daily premium signals",
@@ -21,7 +23,7 @@ const Plans = () => {
     {
       name: "3 Months Access",
       description: "Save more with a 3-month subscription to premium signals",
-      price: "$99",
+      originalPrice: 99,
       color: "green",
       features: [
         "Daily premium signals",
@@ -38,7 +40,7 @@ const Plans = () => {
       name: "Yearly / Lifetime Access",
       description:
         "Best value — long-term access to all premium signals and tools",
-      price: "$299",
+      originalPrice: 299,
       color: "gold",
       features: [
         "Daily premium signals",
@@ -55,41 +57,65 @@ const Plans = () => {
 
   const getButtonStyle = (color) => {
     const colorMap = {
-      green: 'var(--color-primary)',
-      blue: 'var(--color-primary)',
-      amber: 'var(--color-accent2)',
-      gold: 'var(--color-accent2)'
+      green: "var(--color-primary)",
+      blue: "var(--color-primary)",
+      amber: "var(--color-accent2)",
+      gold: "var(--color-accent2)",
     };
-    
+
     return {
       background: colorMap[color] || colorMap.blue,
-      color: 'var(--color-neutral-light)',
-      borderColor: 'var(--color-border-dark)'
+      color: "var(--color-neutral-light)",
+      borderColor: "var(--color-border-dark)",
     };
+  };
+
+  const formatPrice = (n) => `$${n}`;
+
+  const getDiscounted = (n) => {
+    const discounted = Math.round(n * (1 - DISCOUNT_PERCENT / 100));
+    return discounted;
   };
 
   return (
     <section
       id="plans"
       className="py-16 md:py-24 relative overflow-hidden"
-      style={{ backgroundColor: 'var(--color-card-bg)' }}
+      style={{ backgroundColor: "var(--color-card-bg)" }}
     >
       {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl"
-           style={{ backgroundColor: 'var(--color-accent2)', opacity: 0.05 }}></div>
-      <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl"
-           style={{ backgroundColor: 'var(--color-primary)', opacity: 0.05 }}></div>
+      <div
+        className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl"
+        style={{ backgroundColor: "var(--color-accent2)", opacity: 0.05 }}
+      ></div>
+      <div
+        className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl"
+        style={{ backgroundColor: "var(--color-primary)", opacity: 0.05 }}
+      ></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
+          <div
+            className="inline-flex items-center.justify-center mb-4 px-3 py-1 rounded-full text-sm font-semibold"
+            style={{
+              background: "linear-gradient(90deg, #ff7a18, #ffb199)",
+              color: "#fff",
+            }}
+          >
+            🎉 Christmas Sale — {DISCOUNT_PERCENT}% OFF! 🎁
+          </div>
+
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span style={{ color: 'var(--color-text-primary)' }}>
+            <span style={{ color: "var(--color-text-primary)" }}>
               Choose Your{" "}
             </span>
-            <span style={{ color: 'var(--color-accent2)' }}>Trading </span>
-            <span style={{ color: 'var(--color-primary)' }}>Plan</span>
+            <span style={{ color: "var(--color-accent2)" }}>Trading </span>
+            <span style={{ color: "var(--color-primary)" }}>Plan</span>
           </h2>
-          <p className="text-lg max-w-3xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
+          <p
+            className="text-lg max-w-3xl mx-auto"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
             Select the plan that fits your trading style and goals. Upgrade or
             downgrade anytime as your needs change.
           </p>
@@ -107,28 +133,65 @@ const Plans = () => {
             >
               <div className="rounded-xl overflow-hidden h-full flex flex-col lego-card">
                 {plan.popular && (
-                  <div className="py-1 px-4 text-sm font-medium text-center"
-                       style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-neutral-light)' }}>
+                  <div
+                    className="py-1 px-4 text-sm font-medium text-center"
+                    style={{
+                      backgroundColor: "var(--color-primary)",
+                      color: "var(--color-neutral-light)",
+                    }}
+                  >
                     Most Popular
                   </div>
                 )}
 
                 <div className="p-6 flex-grow">
-                  <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text-primary)' }}>
+                  <h3
+                    className="text-2xl font-bold mb-2"
+                    style={{ color: "var(--color-text-primary)" }}
+                  >
                     {plan.name}
                   </h3>
-                  <p className="mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+                  <p
+                    className="mb-6"
+                    style={{ color: "var(--color-text-secondary)" }}
+                  >
                     {plan.description}
                   </p>
 
                   <div className="mb-6">
-                    <span className="text-4xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
-                      {plan.price}
-                    </span>
-                    {plan.period && (
-                      <span className="ml-2" style={{ color: 'var(--color-text-secondary)' }}>
-                        {plan.period}
+                    <div className="flex items-baseline justify-center md:justify-start gap-4">
+                      <span
+                        className="text-lg"
+                        style={{
+                          color: "var(--color-text-secondary)",
+                          textDecoration: "line-through",
+                        }}
+                      >
+                        {formatPrice(plan.originalPrice)}
                       </span>
+                      <span
+                        className="text-4xl font-bold"
+                        style={{ color: "var(--color-accent2)" }}
+                      >
+                        {formatPrice(getDiscounted(plan.originalPrice))}
+                      </span>
+                      <span
+                        className="ml-3 text-sm font-semibold px-2 py-1 rounded"
+                        style={{
+                          background: "rgba(255, 182, 64, 0.12)",
+                          color: "var(--color-accent2)",
+                        }}
+                      >
+                        Save {DISCOUNT_PERCENT}%
+                      </span>
+                    </div>
+                    {plan.period && (
+                      <div
+                        className="mt-1"
+                        style={{ color: "var(--color-text-secondary)" }}
+                      >
+                        {plan.period}
+                      </div>
                     )}
                   </div>
 
@@ -138,7 +201,7 @@ const Plans = () => {
                         <Check
                           className={`h-5 w-5 mr-2 text-${plan.color}-500 flex-shrink-0 mt-0.5`}
                         />
-                        <span style={{ color: 'var(--color-text-secondary)' }}>
+                        <span style={{ color: "var(--color-text-secondary)" }}>
                           {feature}
                         </span>
                       </li>
@@ -154,7 +217,7 @@ const Plans = () => {
                     className="w-full py-3 px-4 rounded-md font-medium transition-all text-center lego-button"
                     style={getButtonStyle(plan.color)}
                   >
-                    {plan.buttonText}
+                    {plan.buttonText} — Save {DISCOUNT_PERCENT}%
                   </a>
                 </div>
               </div>

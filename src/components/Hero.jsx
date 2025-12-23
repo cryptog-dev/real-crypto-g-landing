@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { ArrowDown, ArrowUp, Clock } from "lucide-react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
+import { ArrowDown, ArrowUp, Clock, Gift, Sparkles } from "lucide-react";
 import { Link } from "react-scroll";
 import { ThemeContext } from "../context/ThemeContext";
 import LitecoinLogo from "../assets/ltc.svg";
@@ -10,14 +10,82 @@ import XrpLogo from "../assets/xrp.svg";
 import BnbLogo from "../assets/bnb.svg";
 import DogeLogo from "../assets/doge.svg";
 
-import DayBackground from "../assets/day_bg.jpeg";
-import NightBackground from "../assets/night_bg.jpeg";
+import DayBackground from "../assets/day_bg.webp";
+import NightBackground from "../assets/night_bg.webp";
+
+// Snowflake Component
+const Snowflake = ({ style }) => (
+  <div className="snowflake" style={style}>
+    ❄
+  </div>
+);
+
+// Snow Effect Component
+const SnowEffect = ({ isEnabled }) => {
+  const [snowflakes, setSnowflakes] = useState([]);
+
+  useEffect(() => {
+    if (!isEnabled) return;
+
+    // Generate snowflakes with varied properties
+    const flakes = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      animationDuration: `${8 + Math.random() * 10}s`,
+      animationDelay: `${Math.random() * 5}s`,
+      fontSize: `${10 + Math.random() * 15}px`,
+      opacity: 0.3 + Math.random() * 0.5,
+    }));
+    setSnowflakes(flakes);
+  }, [isEnabled]);
+
+  if (!isEnabled) return null;
+
+  return (
+    <div className="snow-container">
+      {snowflakes.map((flake) => (
+        <Snowflake
+          key={flake.id}
+          style={{
+            left: flake.left,
+            animationDuration: flake.animationDuration,
+            animationDelay: flake.animationDelay,
+            fontSize: flake.fontSize,
+            opacity: flake.opacity,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 const Hero = () => {
   const { darkMode } = useContext(ThemeContext);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
   );
+  const [showSnow, setShowSnow] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Check if Christmas offer is active
+  const isChristmasOfferActive = useMemo(() => {
+    const now = new Date();
+    const offerEndDate = new Date("2025-12-27T23:59:59");
+    return now <= offerEndDate;
+  }, []);
+
+  // Calculate time remaining for urgency
+  const timeRemaining = useMemo(() => {
+    if (!isChristmasOfferActive) return null;
+
+    const now = new Date();
+    const end = new Date("2025-12-27T23:59:59");
+    const diff = end - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    return { days, hours };
+  }, [isChristmasOfferActive]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -25,6 +93,28 @@ const Hero = () => {
     }, 60000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    // Check for reduced motion preference
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handleChange);
+
+    // Disable snow on mobile/small screens
+    const checkScreenSize = () => {
+      setShowSnow(window.innerWidth >= 768 && !mediaQuery.matches);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+      window.removeEventListener("resize", checkScreenSize);
+    };
   }, []);
 
   const signals = [
@@ -51,7 +141,6 @@ const Hero = () => {
     },
   ];
 
-  // Pre-defined positions for better dispersion and zen-like spacing
   const logoPositions = [
     { top: 15, left: 10, size: 40 },
     { top: 25, left: 85, size: 36 },
@@ -81,6 +170,9 @@ const Hero = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      {/* Snow Effect */}
+      <SnowEffect isEnabled={showSnow && !prefersReducedMotion} />
+
       {/* Background overlay */}
       <div
         className="absolute inset-0 z-0"
@@ -90,6 +182,7 @@ const Hero = () => {
             : "linear-gradient(135deg, rgba(248, 249, 250, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%)",
         }}
       ></div>
+
       {/* Enhanced background floating & animated crypto logos */}
       <div className="absolute inset-0 overflow-hidden z-0">
         {logoPositions.map((position, index) => {
@@ -125,9 +218,169 @@ const Hero = () => {
         })}
       </div>
 
-      {/* Enhanced keyframes for zen-like floating animations */}
+      {/* Enhanced keyframes for zen-like floating animations + Christmas effects */}
       <style>
         {`
+/* Snow Effect */
+.snow-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+/* Festive gradient text & button backgrounds */
+.festive-gradient-text {
+  background: linear-gradient(90deg, #ff4d4d 0%, #f59e0b 45%, #10b981 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+
+.festive-gradient-bg {
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 50%, #059669 100%);
+  color: var(--color-neutral-light);
+}
+
+.snowflake {
+  position: absolute;
+  top: -20px;
+  color: #fff;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #0af;
+  animation: snowfall linear infinite;
+  user-select: none;
+  pointer-events: none;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(50px) rotate(360deg);
+    opacity: 0.3;
+  }
+}
+
+/* Christmas Badge Animations */
+@keyframes christmas-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5),
+                0 0 20px rgba(220, 38, 38, 0.3),
+                0 0 30px rgba(220, 38, 38, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.7),
+                0 0 30px rgba(220, 38, 38, 0.5),
+                0 0 40px rgba(220, 38, 38, 0.3);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+@keyframes gift-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.christmas-badge {
+  animation: christmas-glow 2s ease-in-out infinite;
+}
+
+.sparkle-icon {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.gift-icon {
+  animation: gift-bounce 2s ease-in-out infinite;
+}
+
+/* CTA Button Effects */
+@keyframes christmas-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+  }
+}
+
+@keyframes ice-shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2) rotate(360deg);
+  }
+}
+
+.christmas-cta {
+  position: relative;
+  overflow: hidden;
+  animation: christmas-pulse 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.christmas-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.christmas-cta:hover::before {
+  left: 200%;
+}
+
+.christmas-cta:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.6),
+              0 0 40px rgba(220, 38, 38, 0.4);
+}
+
+.christmas-cta:active {
+  transform: scale(0.98);
+}
+
+.sparkle-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: sparkle-burst 0.6s ease-out forwards;
+}
+
 @keyframes card-float {
   0%, 100% {
     transform: translateY(0) scale(1);
@@ -142,209 +395,212 @@ const Hero = () => {
 .animate-card-float {
   animation: card-float 3.5s ease-in-out infinite;
 }
-          @keyframes zen-float-1 {
-            0% { 
-              transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
-              opacity: 0.25;
-            }
-            20% { 
-              transform: translateY(-60px) translateX(45px) rotate(calc(var(--initial-rotation, 0deg) + 72deg)) scale(1.4);
-              opacity: 0.5;
-            }
-            40% { 
-              transform: translateY(40px) translateX(-50px) rotate(calc(var(--initial-rotation, 0deg) + 144deg)) scale(0.6);
-              opacity: 0.6;
-            }
-            60% { 
-              transform: translateY(-45px) translateX(60px) rotate(calc(var(--initial-rotation, 0deg) + 216deg)) scale(1.3);
-              opacity: 0.45;
-            }
-            80% { 
-              transform: translateY(55px) translateX(-40px) rotate(calc(var(--initial-rotation, 0deg) + 288deg)) scale(0.8);
-              opacity: 0.55;
-            }
-            100% { 
-              transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) + 360deg)) scale(1);
-              opacity: 0.25;
-            }
-          }
-          
-          @keyframes zen-float-2 {
-            0% { 
-              transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
-              opacity: 0.25;
-            }
-            15% { 
-              transform: translateY(50px) translateX(-35px) rotate(calc(var(--initial-rotation, 0deg) - 54deg)) scale(1.35);
-              opacity: 0.4;
-            }
-            35% { 
-              transform: translateY(-30px) translateX(65px) rotate(calc(var(--initial-rotation, 0deg) - 108deg)) scale(0.7);
-              opacity: 0.55;
-            }
-            55% { 
-              transform: translateY(60px) translateX(-45px) rotate(calc(var(--initial-rotation, 0deg) - 162deg)) scale(1.2);
-              opacity: 0.5;
-            }
-            75% { 
-              transform: translateY(-40px) translateX(55px) rotate(calc(var(--initial-rotation, 0deg) - 216deg)) scale(0.9);
-              opacity: 0.45;
-            }
-            90% { 
-              transform: translateY(25px) translateX(-30px) rotate(calc(var(--initial-rotation, 0deg) - 270deg)) scale(1.1);
-              opacity: 0.35;
-            }
-            100% { 
-              transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) - 360deg)) scale(1);
-              opacity: 0.25;
-            }
-          }
-          
-          @keyframes zen-float-3 {
-            0% { 
-              transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
-              opacity: 0.25;
-            }
-            12% { 
-              transform: translateY(-35px) translateX(-55px) rotate(calc(var(--initial-rotation, 0deg) + 43deg)) scale(1.45);
-              opacity: 0.55;
-            }
-            25% { 
-              transform: translateY(45px) translateX(30px) rotate(calc(var(--initial-rotation, 0deg) + 86deg)) scale(0.65);
-              opacity: 0.6;
-            }
-            38% { 
-              transform: translateY(-50px) translateX(70px) rotate(calc(var(--initial-rotation, 0deg) + 129deg)) scale(1.25);
-              opacity: 0.5;
-            }
-            50% { 
-              transform: translateY(25px) translateX(-60px) rotate(calc(var(--initial-rotation, 0deg) + 172deg)) scale(0.8);
-              opacity: 0.58;
-            }
-            62% { 
-              transform: translateY(-40px) translateX(45px) rotate(calc(var(--initial-rotation, 0deg) + 215deg)) scale(1.35);
-              opacity: 0.45;
-            }
-            75% { 
-              transform: translateY(55px) translateX(-25px) rotate(calc(var(--initial-rotation, 0deg) + 258deg)) scale(0.75);
-              opacity: 0.52;
-            }
-            88% { 
-              transform: translateY(-30px) translateX(50px) rotate(calc(var(--initial-rotation, 0deg) + 301deg)) scale(1.15);
-              opacity: 0.4;
-            }
-            100% { 
-              transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) + 360deg)) scale(1);
-              opacity: 0.25;
-            }
-          }
-          
-          @keyframes zen-float-4 {
-            0% { 
-              transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
-              opacity: 0.25;
-            }
-            25% { 
-              transform: translateY(65px) translateX(50px) rotate(calc(var(--initial-rotation, 0deg) - 90deg)) scale(1.5);
-              opacity: 0.55;
-            }
-            50% { 
-              transform: translateY(-55px) translateX(-40px) rotate(calc(var(--initial-rotation, 0deg) - 180deg)) scale(0.6);
-              opacity: 0.65;
-            }
-            75% { 
-              transform: translateY(35px) translateX(75px) rotate(calc(var(--initial-rotation, 0deg) - 270deg)) scale(1.3);
-              opacity: 0.5;
-            }
-            100% { 
-              transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) - 360deg)) scale(1);
-              opacity: 0.25;
-            }
-          }
-          
-          .animate-zen-float-1 {
-            animation: zen-float-1 5s ease-in-out infinite;
-          }
-          
-          .animate-zen-float-2 {
-            animation: zen-float-2 6s ease-in-out infinite;
-          }
-          
-          .animate-zen-float-3 {
-            animation: zen-float-3 4s ease-in-out infinite;
-          }
-          
-          .animate-zen-float-4 {
-            animation: zen-float-4 5.5s ease-in-out infinite;
-          }
-          
-          @keyframes constellation-pulse {
-            0%, 100% { 
-              opacity: 0.3;
-              stroke-width: 0.8;
-            }
-            25% { 
-              opacity: 0.7;
-              stroke-width: 1.2;
-            }
-            50% { 
-              opacity: 0.9;
-              stroke-width: 1.5;
-            }
-            75% { 
-              opacity: 0.6;
-              stroke-width: 1.1;
-            }
-          }
-          
-          @keyframes bridge-pulse {
-            0%, 100% { 
-              opacity: 0.1;
-              stroke-width: 0.3;
-            }
-            50% { 
-              opacity: 0.4;
-              stroke-width: 0.6;
-            }
-          }
-          
-          .animate-constellation-pulse {
-            animation: constellation-pulse 8s ease-in-out infinite;
-          }
-          
-          .animate-bridge-pulse {
-            animation: bridge-pulse 12s ease-in-out infinite;
-          }
-          
-          /* Constellation hover effects */
-          .constellation-1:hover .animate-constellation-pulse,
-          .constellation-2:hover .animate-constellation-pulse,
-          .constellation-3:hover .animate-constellation-pulse,
-          .constellation-4:hover .animate-constellation-pulse {
-            animation-duration: 2s;
-            opacity: 1;
-          }
-          
-          @media (hover: hover) {
-            .animate-zen-float-1:hover,
-            .animate-zen-float-2:hover,
-            .animate-zen-float-3:hover,
-            .animate-zen-float-4:hover {
-              animation-play-state: paused;
-              transform: translateY(0) translateX(0) rotate(180deg) scale(1.3) !important;
-              opacity: 0.7 !important;
-              transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            }
-          }
+
+@keyframes zen-float-1 {
+  0% { 
+    transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
+    opacity: 0.25;
+  }
+  20% { 
+    transform: translateY(-60px) translateX(45px) rotate(calc(var(--initial-rotation, 0deg) + 72deg)) scale(1.4);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: translateY(40px) translateX(-50px) rotate(calc(var(--initial-rotation, 0deg) + 144deg)) scale(0.6);
+    opacity: 0.6;
+  }
+  60% { 
+    transform: translateY(-45px) translateX(60px) rotate(calc(var(--initial-rotation, 0deg) + 216deg)) scale(1.3);
+    opacity: 0.45;
+  }
+  80% { 
+    transform: translateY(55px) translateX(-40px) rotate(calc(var(--initial-rotation, 0deg) + 288deg)) scale(0.8);
+    opacity: 0.55;
+  }
+  100% { 
+    transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) + 360deg)) scale(1);
+    opacity: 0.25;
+  }
+}
+
+@keyframes zen-float-2 {
+  0% { 
+    transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
+    opacity: 0.25;
+  }
+  15% { 
+    transform: translateY(50px) translateX(-35px) rotate(calc(var(--initial-rotation, 0deg) - 54deg)) scale(1.35);
+    opacity: 0.4;
+  }
+  35% { 
+    transform: translateY(-30px) translateX(65px) rotate(calc(var(--initial-rotation, 0deg) - 108deg)) scale(0.7);
+    opacity: 0.55;
+  }
+  55% { 
+    transform: translateY(60px) translateX(-45px) rotate(calc(var(--initial-rotation, 0deg) - 162deg)) scale(1.2);
+    opacity: 0.5;
+  }
+  75% { 
+    transform: translateY(-40px) translateX(55px) rotate(calc(var(--initial-rotation, 0deg) - 216deg)) scale(0.9);
+    opacity: 0.45;
+  }
+  90% { 
+    transform: translateY(25px) translateX(-30px) rotate(calc(var(--initial-rotation, 0deg) - 270deg)) scale(1.1);
+    opacity: 0.35;
+  }
+  100% { 
+    transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) - 360deg)) scale(1);
+    opacity: 0.25;
+  }
+}
+
+@keyframes zen-float-3 {
+  0% { 
+    transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
+    opacity: 0.25;
+  }
+  12% { 
+    transform: translateY(-35px) translateX(-55px) rotate(calc(var(--initial-rotation, 0deg) + 43deg)) scale(1.45);
+    opacity: 0.55;
+  }
+  25% { 
+    transform: translateY(45px) translateX(30px) rotate(calc(var(--initial-rotation, 0deg) + 86deg)) scale(0.65);
+    opacity: 0.6;
+  }
+  38% { 
+    transform: translateY(-50px) translateX(70px) rotate(calc(var(--initial-rotation, 0deg) + 129deg)) scale(1.25);
+    opacity: 0.5;
+  }
+  50% { 
+    transform: translateY(25px) translateX(-60px) rotate(calc(var(--initial-rotation, 0deg) + 172deg)) scale(0.8);
+    opacity: 0.58;
+  }
+  62% { 
+    transform: translateY(-40px) translateX(45px) rotate(calc(var(--initial-rotation, 0deg) + 215deg)) scale(1.35);
+    opacity: 0.45;
+  }
+  75% { 
+    transform: translateY(55px) translateX(-25px) rotate(calc(var(--initial-rotation, 0deg) + 258deg)) scale(0.75);
+    opacity: 0.52;
+  }
+  88% { 
+    transform: translateY(-30px) translateX(50px) rotate(calc(var(--initial-rotation, 0deg) + 301deg)) scale(1.15);
+    opacity: 0.4;
+  }
+  100% { 
+    transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) + 360deg)) scale(1);
+    opacity: 0.25;
+  }
+}
+
+@keyframes zen-float-4 {
+  0% { 
+    transform: translateY(0) translateX(0) rotate(var(--initial-rotation, 0deg)) scale(1);
+    opacity: 0.25;
+  }
+  25% { 
+    transform: translateY(65px) translateX(50px) rotate(calc(var(--initial-rotation, 0deg) - 90deg)) scale(1.5);
+    opacity: 0.55;
+  }
+  50% { 
+    transform: translateY(-55px) translateX(-40px) rotate(calc(var(--initial-rotation, 0deg) - 180deg)) scale(0.6);
+    opacity: 0.65;
+  }
+  75% { 
+    transform: translateY(35px) translateX(75px) rotate(calc(var(--initial-rotation, 0deg) - 270deg)) scale(1.3);
+    opacity: 0.5;
+  }
+  100% { 
+    transform: translateY(0) translateX(0) rotate(calc(var(--initial-rotation, 0deg) - 360deg)) scale(1);
+    opacity: 0.25;
+  }
+}
+
+.animate-zen-float-1 {
+  animation: zen-float-1 5s ease-in-out infinite;
+}
+
+.animate-zen-float-2 {
+  animation: zen-float-2 6s ease-in-out infinite;
+}
+
+.animate-zen-float-3 {
+  animation: zen-float-3 4s ease-in-out infinite;
+}
+
+.animate-zen-float-4 {
+  animation: zen-float-4 5.5s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+  .animate-zen-float-1:hover,
+  .animate-zen-float-2:hover,
+  .animate-zen-float-3:hover,
+  .animate-zen-float-4:hover {
+    animation-play-state: paused;
+    transform: translateY(0) translateX(0) rotate(180deg) scale(1.3) !important;
+    opacity: 0.7 !important;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .christmas-cta,
+  .christmas-badge,
+  .snowflake,
+  .sparkle-icon,
+  .gift-icon,
+  .animate-card-float {
+    animation: none !important;
+  }
+  
+  .christmas-cta:hover {
+    transform: none;
+  }
+}
         `}
       </style>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Christmas Offer Badge */}
+        {isChristmasOfferActive && (
+          <div className="mb-6 flex justify-center">
+            <div
+              className="christmas-badge inline-flex items-center gap-2 px-6 py-3 rounded-full backdrop-blur-md border-2"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(220, 38, 38, 0.9) 0%, rgba(185, 28, 28, 0.9) 100%)",
+                borderColor: "rgba(254, 202, 202, 0.5)",
+                color: "#fff",
+              }}
+              role="alert"
+              aria-live="polite"
+            >
+              <span className="text-2xl gift-icon" aria-hidden="true">
+                🎄
+              </span>
+              <div className="flex flex-col items-start">
+                <span className="font-bold text-sm md:text-base">
+                  Christmas Special Offer
+                </span>
+                {timeRemaining && (
+                  <span className="text-xs opacity-90">
+                    Ends in {timeRemaining.days}d {timeRemaining.hours}h • Valid
+                    till 27th Dec
+                  </span>
+                )}
+              </div>
+              <Sparkles className="w-5 h-5 sparkle-icon" aria-hidden="true" />
+            </div>
+          </div>
+        )}
+
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-          <span style={{ color: "var(--color-text-primary)" }}>Premium </span>
-          <span style={{ color: "var(--color-primary)" }}>Crypto</span>
-          <span style={{ color: "var(--color-accent2)" }}> Signals</span>
+          <span className="festive-gradient-text">Premium </span>
+          <span className="festive-gradient-text">Crypto</span>
+          <span className="festive-gradient-text"> Signals</span>
         </h1>
 
         {/* Subheading */}
@@ -358,30 +614,41 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <a
-            href="#plans"
-            className="px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center cursor-pointer lego-button"
+          <button
+            onClick={() => {
+              document
+                .getElementById("plans")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className={`px-6 py-3 rounded-md font-medium transition-all text-center cursor-pointer lego-button flex items-center justify-center gap-2 ${
+              isChristmasOfferActive ? "christmas-cta festive-gradient-bg" : ""
+            }`}
             style={{
-              background: "var(--color-accent2)",
               color: "var(--color-neutral-light)",
               borderColor: "var(--color-border-dark)",
             }}
-            onClick={(e) => {
-              e.preventDefault();
-              document
-                .getElementById("plans")
-                .scrollIntoView({ behavior: "smooth" });
-            }}
+            aria-label={
+              isChristmasOfferActive
+                ? "Join Premium Group - Christmas Offer"
+                : "Join Premium Group"
+            }
           >
-            Join Premium Group
-          </a>
+            {isChristmasOfferActive && (
+              <Gift className="w-5 h-5" aria-hidden="true" />
+            )}
+            <span>
+              Join Premium Group
+              {isChristmasOfferActive && (
+                <span className="hidden sm:inline"> – Christmas Offer</span>
+              )}
+            </span>
+          </button>
           <a
             href="https://chat.whatsapp.com/Bpbzs4D8XAkHGm38CLbN3l"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center lego-button"
+            className="px-6 py-3 rounded-md font-medium transition-all hover:shadow-lg text-center lego-button hover:scale-105 festive-gradient-bg"
             style={{
-              background: "var(--color-primary)",
               color: "var(--color-neutral-light)",
               borderColor: "var(--color-border-dark)",
             }}
@@ -389,127 +656,7 @@ const Hero = () => {
             Try Free Channel
           </a>
         </div>
-        {/* Signal Card */}
-        <div
-          className="mx-auto w-full max-w-md 
-  backdrop-blur-xl 
-  rounded-2xl 
-  shadow-lg 
-  p-6 
-  transform transition-all 
-  hover:scale-105 
-  animate-card-float lego-card"
-          style={{
-            borderColor: "var(--color-border-light)",
-            boxShadow: "var(--card-shadow)",
-          }}
-        >
-          <div className="flex justify-between items-center mb-4">
-            <h3
-              className="text-lg font-semibold"
-              style={{ color: "var(--color-text-primary)" }}
-            >
-              Latest Signals
-            </h3>
-            <span
-              className="px-3 py-1 rounded-full text-sm font-medium"
-              style={{
-                backgroundColor: "var(--color-primary)",
-                color: "var(--color-neutral-light)",
-              }}
-            >
-              Live
-            </span>
-          </div>
 
-          <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
-            {signals.map((sig, index) => {
-              const profitPercentage = (
-                ((sig.targetPrice - sig.entryPrice) / sig.entryPrice) *
-                100
-              ).toFixed(2);
-
-              return (
-                <div
-                  key={sig.coin + index}
-                  className="rounded-xl px-3 py-3 flex flex-col gap-2"
-                  style={{
-                    backgroundColor: "var(--color-card-hover)",
-                    borderWidth: "1px",
-                    borderStyle: "solid",
-                    borderColor: "var(--color-border-light)",
-                  }}
-                >
-                  <div className="flex justify-between items-center">
-                    <span
-                      className="text-sm font-medium"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    >
-                      {sig.coin}
-                    </span>
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full font-medium"
-                      style={{
-                        backgroundColor: "var(--color-accent1)",
-                        color: "var(--color-neutral-light)",
-                      }}
-                    >
-                      +{profitPercentage}%
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between text-xs">
-                    <span style={{ color: "var(--color-text-secondary)" }}>
-                      Entry
-                    </span>
-                    <span style={{ color: "var(--color-text-primary)" }}>
-                      ${sig.entryPrice.toFixed(2)}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center text-xs">
-                    <span style={{ color: "var(--color-text-secondary)" }}>
-                      Target
-                    </span>
-                    <span
-                      className="flex items-center font-medium"
-                      style={{ color: "var(--color-accent1)" }}
-                    >
-                      ${sig.targetPrice.toFixed(2)}
-                      <ArrowUp className="ml-1 h-3 w-3" />
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center text-xs">
-                    <span style={{ color: "var(--color-text-secondary)" }}>
-                      Stop
-                    </span>
-                    <span
-                      className="flex items-center font-medium"
-                      style={{ color: "var(--color-secondary)" }}
-                    >
-                      ${sig.stopLoss.toFixed(2)}
-                      <ArrowDown className="ml-1 h-3 w-3" />
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center mt-1">
-                    <span
-                      className="text-[10px]"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    >
-                      Updated {sig.time}
-                    </span>
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: "var(--color-accent1)" }}
-                    ></div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
         {/* Learn More link */}
         <Link
           to="features"
@@ -522,9 +669,10 @@ const Hero = () => {
           onMouseLeave={(e) =>
             (e.target.style.color = "var(--color-text-secondary)")
           }
+          aria-label="Learn more about our features"
         >
           <span className="mr-2">Learn More</span>
-          <ArrowDown className="h-4 w-4 animate-bounce" />
+          <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden="true" />
         </Link>
       </div>
     </section>
